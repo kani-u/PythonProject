@@ -1,24 +1,45 @@
+import logging
+from logging.handlers import RotatingFileHandler
 import json
 import os
-from datetime import datetime
 
 LOG_FILE = "user_actions.log"
 
+class JsonLogFormatter(logging.Formatter):
+    def format(self, record):
+        # Собираем лог как словарь
+        log_entry = {
+            "timestamp": self.formatTime(record, self.datefmt),
+            "level": record.levelname,
+            "username": getattr(record, 'username', None),
+            "action": getattr(record, 'action', record.getMessage())
+        }
+        return json.dumps(log_entry, ensure_ascii=False)
+
+# Создаём логгер и хендлер только единожды
+logger = logging.getLogger("lab_shell")
+logger.setLevel(logging.INFO)
+if not logger.handlers:
+    handler = RotatingFileHandler(LOG_FILE, maxBytes=1_000_000, backupCount=5, encoding="utf-8")
+    formatter = JsonLogFormatter()
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
 
 def log_action(username, action):
-    log_entry = {
-        "username": username,
-        "action": action,
-        "timestamp": datetime.now().isoformat()
-    }
-
-    with open(LOG_FILE, "a") as f:
-        f.write(json.dumps(log_entry) + "\n")
-
+    print(f"Logging: {username} {action}")  # <-- Для отладки
+    try:
+        logger.info("", extra={"username": username, "action": action})
+    except Exception as e:
+        print("LOG ERROR:", e)
 
 def get_logs():
+    logs = []
     if not os.path.exists(LOG_FILE):
-        return []
-
-    with open(LOG_FILE, "r") as f:
-        return [json.loads(line) for line in f]
+        return logs
+    with open(LOG_FILE, "r", encoding="utf-8") as f:
+        for line in f:
+            try:
+                logs.append(json.loads(line))
+            except Exception:
+                continue
+    return logs
