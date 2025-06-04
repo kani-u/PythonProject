@@ -7,18 +7,6 @@ from PyQt5.QtCore import Qt
 from user_db import verify_user
 from logger import log_action
 
-def handle_login(self):
-    username = self.username_input.text()
-    password = self.password_input.text()
-
-    valid, user_info = verify_user(username, password)
-    if valid:
-        log_action(username, "login")
-        self.on_login_success(username, user_info)
-    else:
-        QMessageBox.critical(self, "Login Failed", "Invalid username or password.")
-
-
 
 class LoginWindow(QWidget):
     def __init__(self, on_login_success):
@@ -136,6 +124,8 @@ class LoginWindow(QWidget):
 
         valid, user_info = verify_user(username, password)
         if valid:
+            log_action(username, "login_success")
             self.on_login_success(username, user_info)
         else:
+            log_action(username, "login_failed")
             QMessageBox.critical(self, "Login Failed", "Invalid username or password.")

@@ -1,0 +1,4 @@
+{"timestamp": "2025-06-05 00:06:56,791", "level": "INFO", "username": "student1", "action": "login"}
+{"timestamp": "2025-06-05 00:37:33,130", "level": "INFO", "username": "ыефыоиюсЛ", "action": "login_failed", "extra": null}
+{"timestamp": "2025-06-05 00:37:41,004", "level": "INFO", "username": "ыефыоиюсЛ\\\\\\\\\\\\\\", "action": "login_failed", "extra": null}
+{"timestamp": "2025-06-05 00:37:50,555", "level": "INFO", "username": "student1", "action": "login_success", "extra": null}

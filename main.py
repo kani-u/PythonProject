@@ -19,4 +19,3 @@ class LabShellApp:
 
 if __name__ == "__main__":
     LabShellApp().run()
-#пошелл нахуй

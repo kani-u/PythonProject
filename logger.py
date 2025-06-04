@@ -7,16 +7,15 @@ LOG_FILE = "user_actions.log"
 
 class JsonLogFormatter(logging.Formatter):
     def format(self, record):
-        # Собираем лог как словарь
         log_entry = {
             "timestamp": self.formatTime(record, self.datefmt),
             "level": record.levelname,
             "username": getattr(record, 'username', None),
-            "action": getattr(record, 'action', record.getMessage())
+            "action": getattr(record, 'action', record.getMessage()),
+            "extra": getattr(record, 'extra', None),
         }
         return json.dumps(log_entry, ensure_ascii=False)
 
-# Создаём логгер и хендлер только единожды
 logger = logging.getLogger("lab_shell")
 logger.setLevel(logging.INFO)
 if not logger.handlers:
@@ -25,10 +24,16 @@ if not logger.handlers:
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 
-def log_action(username, action):
-    print(f"Logging: {username} {action}")  # <-- Для отладки
+def log_action(username, action, extra=None):
     try:
-        logger.info("", extra={"username": username, "action": action})
+        logger.info(
+            "",
+            extra={
+                "username": username,
+                "action": action,
+                "extra": extra
+            }
+        )
     except Exception as e:
         print("LOG ERROR:", e)
 

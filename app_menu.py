@@ -18,6 +18,23 @@ def launch_app(self, app_name):
 
 
 class AppMenu(QWidget):
+    def launch_app(self, app_name):
+        try:
+            subprocess.Popen([app_name], cwd=self.user_info.get("home_path", None), shell=True)
+            log_action(self.username, f"launch_app", extra={"app": app_name})
+        except Exception as e:
+            log_action(self.username, "launch_app_failed", extra={"app": app_name, "error": str(e)})
+            QMessageBox.warning(self, "Error", f"Failed to launch {app_name}:\n{e}")
+
+    def confirm_logout(self):
+        reply = QMessageBox.question(
+            self, "Confirm Logout",
+            "Are you sure you want to logout?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            log_action(self.username, "logout")
+            self.close()
     def __init__(self, username, user_info):
         super().__init__()
         self.username = username
