@@ -6,6 +6,16 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeySequence, QFont
 import subprocess
 
+from logger import log_action
+
+def launch_app(self, app_name):
+    try:
+        subprocess.Popen([app_name], cwd=self.user_info.get("home_path", None), shell=True)
+        log_action(self.username, f"launched {app_name}")
+    except Exception as e:
+        QMessageBox.warning(self, "Error", f"Failed to launch {app_name}:\n{e}")
+
+
 
 class AppMenu(QWidget):
     def __init__(self, username, user_info):
