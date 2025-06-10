@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Блокнот",
+    "path": "C:/Windows/System32/notepad.exe",
+    "icon": "C:/Windows/System32/notepad.exe"
+  },
+  {
+    "name": "Калькулятор",
+    "path": "C:/Windows/System32/calc.exe",
+    "icon": "C:/Windows/System32/calc.exe"
+  },
+  {
+    "name": "Visual Studio",
+    "path": "C:/Users/Msi/Desktop/Visual Studio 2022.lnk",
+    "icon": "C:/Users/Msi/Desktop/Visual Studio 2022.lnk"
+  }
+
+]

@@ -100,8 +100,7 @@ class AppMenu(QWidget):
             log_action(self.username, "launch_app_denied", extra={"app": app_name})
             return
         try:
-            subprocess.Popen([app_name], cwd=self.user_info.get("home_path", None), shell=True)
-            log_action(self.username, "launch_app", extra={"app": app_name})
+            subprocess.Popen([app_name], shell=True)
         except Exception as e:
             log_action(self.username, "launch_app_failed", extra={"app": app_name, "error": str(e)})
             QMessageBox.warning(self, "Error", f"Failed to launch {app_name}:\n{e}")
