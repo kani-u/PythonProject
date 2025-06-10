@@ -84,6 +84,8 @@ class AdminLoginDialog(QDialog):
             self.password_input.clear()
             self.password_input.setFocus()
 
+import os
+from PyQt5.QtGui import QIcon
 class AppMenu(QWidget):
     def __init__(self, username, user_info):
         super().__init__()
@@ -185,8 +187,10 @@ class AppMenu(QWidget):
         layout.addWidget(greeting)
 
         for app in self.user_info.get("allowed_apps", []):
-            btn = QPushButton(f"Launch {app}")
-            btn.clicked.connect(lambda checked, a=app: self.launch_app(a))
+            btn = QPushButton(app['name'])
+            if 'icon' in app and os.path.exists(app['icon']):
+                btn.setIcon(QIcon(app['icon']))
+            btn.clicked.connect(lambda checked, p=app['path']: self.launch_app(p))
             layout.addWidget(btn)
 
         hint_label = QLabel("Press Ctrl+Shift+Q for admin exit")

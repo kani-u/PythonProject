@@ -1,31 +1,31 @@
 import bcrypt
+import json
+import os
 
-# Пример базы (в будущем заменим на SQLite)
+ALLOWED_APPS_FILE = "allowed_apps.json"
+
+def load_allowed_apps():
+    if os.path.exists(ALLOWED_APPS_FILE):
+        with open(ALLOWED_APPS_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+ALLOWED_APPS = load_allowed_apps()
+
 USERS = {
-    "student1": {
+    "st": {
         "password_hash": bcrypt.hashpw(b"1234", bcrypt.gensalt()).decode(),
-
-        "allowed_apps": ["notepad", "calc"]
+        # Список программ теперь общий, хранить в каждом пользователе не нужно
     },
-
-    "dias": {
-        "password_hash": bcrypt.hashpw(b"loh", bcrypt.gensalt()).decode(),
-
-        "allowed_apps": ["notepad", "calc", r"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe"]
-    },
-
-    "talip": {
-        "password_hash": bcrypt.hashpw(b"kot", bcrypt.gensalt()).decode(),
-
-        "allowed_apps": ["notepad", "calc"]
-    }
+    # ... другие пользователи
 }
 
 def verify_user(username, password):
     user = USERS.get(username)
     if not user:
         return False, None
-
     if bcrypt.checkpw(password.encode(), user["password_hash"].encode()):
-        return True, user
+        user_info = dict(user)
+        user_info["allowed_apps"] = ALLOWED_APPS
+        return True, user_info
     return False, None

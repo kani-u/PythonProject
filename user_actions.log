@@ -33,3 +33,6 @@
 {"timestamp": "2025-06-10 13:06:18,779", "level": "INFO", "username": "dias", "action": "admin_exit", "extra": null}
 {"timestamp": "2025-06-10 13:11:14,351", "level": "INFO", "username": "dias", "action": "login_success", "extra": null}
 {"timestamp": "2025-06-10 13:11:31,983", "level": "INFO", "username": "dias", "action": "admin_exit", "extra": null}
+{"timestamp": "2025-06-10 14:23:08,184", "level": "INFO", "username": "talip", "action": "login_failed", "extra": null}
+{"timestamp": "2025-06-10 14:23:14,362", "level": "INFO", "username": "talip", "action": "login_failed", "extra": null}
+{"timestamp": "2025-06-10 14:23:27,491", "level": "INFO", "username": "st", "action": "login_success", "extra": null}
