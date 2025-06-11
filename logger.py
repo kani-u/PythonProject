@@ -3,7 +3,15 @@ from logging.handlers import RotatingFileHandler
 import json
 import os
 
-LOG_FILE = "user_actions.log"
+# Получаем путь к папке с exe-файлом (или скриптом, если в dev-режиме)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Папка для логов
+LOG_DIR = os.path.join(BASE_DIR, "logs")
+os.makedirs(LOG_DIR, exist_ok=True)
+
+# Полный путь к лог-файлу
+LOG_FILE = os.path.join(LOG_DIR, "user_actions.log")
 
 class JsonLogFormatter(logging.Formatter):
     def format(self, record):
@@ -18,6 +26,7 @@ class JsonLogFormatter(logging.Formatter):
 
 logger = logging.getLogger("lab_shell")
 logger.setLevel(logging.INFO)
+
 if not logger.handlers:
     handler = RotatingFileHandler(LOG_FILE, maxBytes=1_000_000, backupCount=5, encoding="utf-8")
     formatter = JsonLogFormatter()

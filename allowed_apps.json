@@ -6,13 +6,23 @@
   },
   {
     "name": "Калькулятор",
-    "path": "C:/Windows/System32/calc.exe",
+    "path": "C:/Users/вбокс/Desctop/Калькулятор.lnk",
     "icon": "C:/Windows/System32/calc.exe"
   },
   {
     "name": "Visual Studio",
     "path": "C:/Users/Msi/Desktop/Visual Studio 2022.lnk",
     "icon": "C:/Users/Msi/Desktop/Visual Studio 2022.lnk"
+  },
+  {
+    "name": "PyCharm",
+    "path": "C:/Users/Msi/Desktop/PyCharm Community Edition 2024.3.lnk",
+    "icon": "C:/Users/Msi/Desktop/PyCharm Community Edition 2024.3.lnk"
+  },
+  {
+    "name": "Chrome",
+    "path": "C:/Users/Public/Desktop/Google Chrome.lnk",
+    "icon": "C:/Users/Public/Desktop/Google Chrome.lnk"
   }
 
 ]

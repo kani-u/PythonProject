@@ -2,14 +2,15 @@ from PyQt5.QtWidgets import (
     QWidget, QPushButton, QVBoxLayout, QLabel, QMessageBox, QShortcut, QDialog, QLineEdit
 )
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QKeySequence, QFont
+from PyQt5.QtGui import QKeySequence, QFont, QIcon
 import subprocess
+import os
+import json
 
 from logger import log_action
 
 def verify_admin_password(password):
-
-    return password == "admin123"
+    return password == "123"
 
 class AdminLoginDialog(QDialog):
     def __init__(self, parent=None):
@@ -84,25 +85,25 @@ class AdminLoginDialog(QDialog):
             self.password_input.clear()
             self.password_input.setFocus()
 
-import os
-from PyQt5.QtGui import QIcon
 class AppMenu(QWidget):
-    def __init__(self, username, user_info):
+    def __init__(self, username, user_info, allowed_apps):
         super().__init__()
         self.username = username
         self.user_info = user_info
         self.is_admin = user_info.get("is_admin", False)
+        self.allowed_apps = allowed_apps  # Получаем список разрешенных приложений из аргумента
         self.init_ui()
         self.setup_shortcuts()
 
-    def launch_app(self, app_name):
-        allowed = self.user_info.get("allowed_apps", [])
-        if app_name not in allowed:
+    def launch_app(self, app_path):
+        app_name = next((app['name'] for app in self.allowed_apps if app['path'] == app_path), None)
+        if not app_name:
             QMessageBox.warning(self, "Ошибка", "Запуск этой программы запрещён.")
-            log_action(self.username, "launch_app_denied", extra={"app": app_name})
+            log_action(self.username, "launch_app_denied", extra={"app": app_path})
             return
         try:
-            subprocess.Popen([app_name], shell=True)
+            subprocess.Popen([app_path], shell=True)
+            log_action(self.username, "launch_app", extra={"app": app_name})
         except Exception as e:
             log_action(self.username, "launch_app_failed", extra={"app": app_name, "error": str(e)})
             QMessageBox.warning(self, "Error", f"Failed to launch {app_name}:\n{e}")
@@ -125,9 +126,28 @@ class AppMenu(QWidget):
         dialog = AdminLoginDialog(self)
         if dialog.exec_() and dialog.result:
             log_action(self.username, "admin_exit")
-            QMessageBox.information(self, "Admin Exit", "Admin exit confirmed.")
+            QMessageBox.information(self, "Admin Exit", "Оболочка будет отключена. Возвращаем explorer...")
+
+            # Пытаемся сменить Shell обратно на explorer.exe
+            try:
+                subprocess.run([
+                    "reg", "add",
+                    r"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon",
+                    "/v", "Shell",
+                    "/t", "REG_SZ",
+                    "/d", "explorer.exe",
+                    "/f"
+                ], shell=True)
+            except Exception as e:
+                log_action(self.username, "admin_exit_failed", extra={"error": str(e)})
+                QMessageBox.warning(self, "Ошибка", f"Не удалось изменить оболочку:\n{e}")
+                return
+
             self.is_admin = True
             self.close()
+
+            # Выходим из сессии — вернёт пользователя на экран входа
+            subprocess.run("shutdown -l", shell=True)
         else:
             log_action(self.username, "admin_exit_failed")
 
@@ -186,7 +206,7 @@ class AppMenu(QWidget):
         greeting.setAlignment(Qt.AlignCenter)
         layout.addWidget(greeting)
 
-        for app in self.user_info.get("allowed_apps", []):
+        for app in self.allowed_apps:
             btn = QPushButton(app['name'])
             if 'icon' in app and os.path.exists(app['icon']):
                 btn.setIcon(QIcon(app['icon']))
