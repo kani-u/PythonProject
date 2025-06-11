@@ -1,0 +1,5 @@
+{"timestamp": "2025-06-11 20:27:08,178", "level": "INFO", "username": "st", "action": "login_success", "extra": null}
+{"timestamp": "2025-06-11 20:27:18,157", "level": "INFO", "username": "st", "action": "launch_app", "extra": {"app": "Visual Studio"}}
+{"timestamp": "2025-06-11 20:27:29,822", "level": "INFO", "username": "st", "action": "admin_exit", "extra": null}
+{"timestamp": "2025-06-12 01:42:46,853", "level": "INFO", "username": "st", "action": "login_success", "extra": null}
+{"timestamp": "2025-06-12 01:43:09,030", "level": "INFO", "username": "st", "action": "admin_exit", "extra": null}
