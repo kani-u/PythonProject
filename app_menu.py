@@ -128,26 +128,32 @@ class AppMenu(QWidget):
             log_action(self.username, "admin_exit")
             QMessageBox.information(self, "Admin Exit", "Оболочка будет отключена. Возвращаем explorer...")
 
-            # Пытаемся сменить Shell обратно на explorer.exe
-            try:
-                subprocess.run([
-                    "reg", "add",
-                    r"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon",
-                    "/v", "Shell",
-                    "/t", "REG_SZ",
-                    "/d", "explorer.exe",
-                    "/f"
-                ], shell=True)
-            except Exception as e:
-                log_action(self.username, "admin_exit_failed", extra={"error": str(e)})
-                QMessageBox.warning(self, "Ошибка", f"Не удалось изменить оболочку:\n{e}")
+            # Команда для изменения оболочки (shell) через PowerShell с UAC
+            ps_cmd = (
+                'Start-Process powershell -ArgumentList '
+                '"-NoProfile -ExecutionPolicy Bypass -Command '
+                "Set-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon' "
+                "-Name 'Shell' -Value 'explorer.exe'" '" -Verb RunAs'
+            )
+
+            # Запускаем PowerShell с повышением прав
+            result = subprocess.run(
+                ["powershell", "-Command", ps_cmd],
+                shell=True, capture_output=True, text=True
+            )
+            log_action(self.username, "admin_shell_change", extra={
+                "stdout": result.stdout, "stderr": result.stderr, "returncode": result.returncode
+            })
+
+            if result.returncode != 0:
+                QMessageBox.warning(self, "Ошибка", f"Не удалось изменить оболочку:\n{result.stderr or result.stdout}")
                 return
 
             self.is_admin = True
             self.close()
 
-            # Выходим из сессии — вернёт пользователя на экран входа
-            subprocess.run("shutdown -l", shell=True)
+            # Перезагрузка вместо логаута!
+            subprocess.run("shutdown -r -t 0", shell=True)
         else:
             log_action(self.username, "admin_exit_failed")
 

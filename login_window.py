@@ -13,6 +13,7 @@ class LoginWindow(QWidget):
         super().__init__()
         self.on_login_success = on_login_success
         self.init_ui()
+        self.allow_close = False
 
     def init_ui(self):
         self.setWindowTitle("Lab Shell - Login")
@@ -122,10 +123,20 @@ class LoginWindow(QWidget):
         username = self.username_input.text()
         password = self.password_input.text()
 
+
         valid, user_info = verify_user(username, password)
         if valid:
             log_action(username, "login_success")
+            self.allow_close = True   # После успешного входа разрешаем закрытие
             self.on_login_success(username, user_info)
+            self.close()             # Закрываем окно
         else:
             log_action(username, "login_failed")
             QMessageBox.critical(self, "Login Failed", "Invalid username or password.")
+
+    def closeEvent(self, event):
+        if self.allow_close:
+            event.accept()
+        else:
+            QMessageBox.warning(self, "Внимание", "Выход из оболочки запрещён на этом этапе!")
+            event.ignore()

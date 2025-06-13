@@ -13,12 +13,14 @@ class LabShellApp:
 
     def load_allowed_apps(self):
         try:
-            with open("allowed_apps.json", "r", encoding="utf-8") as f:
+            # Абсолютный путь к allowed_apps.json рядом с этим скриптом
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            apps_path = os.path.join(base_dir, "allowed_apps.json")
+            with open(apps_path, "r", encoding="utf-8") as f:
                 return json.load(f)
         except Exception as e:
-            QMessageBox.critical(None, "Error", f"Failed to load allowed_apps.json:\n{e}")
+            QMessageBox.critical(None, "Ошибка", f"Не удалось загрузить allowed_apps.json:\n{e}")
             return []
-
     def on_login_success(self, username, user_info):
         self.login_window.close()
         allowed_apps = self.load_allowed_apps()

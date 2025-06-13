@@ -1,6 +1,4 @@
 import bcrypt
-import json
-import os
 
 USERS = {
     "st": {
