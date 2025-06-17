@@ -21,6 +21,8 @@ class LabShellApp:
         except Exception as e:
             QMessageBox.critical(None, "Ошибка", f"Не удалось загрузить allowed_apps.json:\n{e}")
             return []
+        
+        
     def on_login_success(self, username, user_info):
         self.login_window.close()
         allowed_apps = self.load_allowed_apps()

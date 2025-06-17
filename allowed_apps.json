@@ -2,27 +2,32 @@
   {
     "name": "Блокнот",
     "path": "C:/Windows/System32/notepad.exe",
-    "icon": "C:/Windows/System32/notepad.exe"
+    "icon": "ico/notepad.png"
   },
   {
-    "name": "Калькулятор",
-    "path": "C:/Users/вбокс/Desctop/Калькулятор.lnk",
-    "icon": "C:/Windows/System32/calc.exe"
+    "name": "Проводник",
+    "path": "explorer.exe",
+    "icon": "ico/explorer.png"
   },
   {
     "name": "Visual Studio",
     "path": "C:/Users/Msi/Desktop/Visual Studio 2022.lnk",
-    "icon": "C:/Users/Msi/Desktop/Visual Studio 2022.lnk"
+    "icon": "ico/visual-studio.png"
   },
   {
     "name": "PyCharm",
     "path": "C:/Users/Msi/Desktop/PyCharm Community Edition 2024.3.lnk",
-    "icon": "C:/Users/Msi/Desktop/PyCharm Community Edition 2024.3.lnk"
+    "icon": "ico/pycharm.png"
   },
   {
     "name": "Chrome",
     "path": "C:/Users/Public/Desktop/Google Chrome.lnk",
-    "icon": "C:/Users/Public/Desktop/Google Chrome.lnk"
+    "icon": "ico/chrome.png"
+  },
+  {
+    "name": "Intellij IDEA",
+    "path": "C:/Users/Public/Desktop/IntelliJ IDEA Community Edition 2024.2.1.lnk",
+    "icon": "ico/intellij-idea.png"
   }
 
 ]
